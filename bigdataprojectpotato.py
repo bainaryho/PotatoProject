@@ -10,7 +10,7 @@ Original file is located at
 import pandas as pd
 import numpy as np
 
-#공공데이터 농축산물원천조사가격정보 읽어오기
+#공공데이터 농축산물원천조사가격정보 데이터프레임 생성
 df101 = pd.read_csv('/content/price_data/원천조사가격정보_202101.csv')
 df102 = pd.read_csv('/content/price_data/원천조사가격정보_202102.csv')
 df103 = pd.read_csv('/content/price_data/원천조사가격정보_202103.csv')
@@ -32,11 +32,46 @@ df206 = pd.read_csv('/content/price_data/원천조사가격정보_202206.csv')
 df207 = pd.read_csv('/content/price_data/원천조사가격정보_202207.csv')
 df208 = pd.read_csv('/content/price_data/원천조사가격정보_202208.csv')
 
-#데이터 프레임내 불필요한 열 삭제
+#데이터 프레임 리스트 생성
+dlist = [df101,df102,df103,df104,df105,df106,df107,df108,df109,df110,
+         df111,df112,df201,df202,df203,df204,df205,df206,df207,df208]
+
+#불필요한 열 삭제
+for i in dlist :
+  i.drop(['EXAMIN_SE_CODE','STD_PRDLST_CODE','EXAMIN_PRDLST_CODE','STD_SPCIES_CODE',
+              'EXAMIN_SPCIES_CODE','STD_UNIT_CODE','STD_UNIT_NM','BFRT_PRIC','AREA_CODE',
+              'STD_MRKT_CODE','EXAMIN_MRKT_CODE','STD_MRKT_NM','EXAMIN_MRKT_NM'],axis=1,inplace=True)
+
+#년도와 월을 구분하는 Month 열 추가
+df101['Month'] = "21.01"
+df102['Month'] = "21.02"
+df103['Month'] = "21.03"
+df104['Month'] = "21.04"
+df105['Month'] = "21.05"
+df106['Month'] = "21.06"
+df107['Month'] = "21.07"
+df108['Month'] = "21.08"
+df109['Month'] = "21.09"
+df110['Month'] = "21.10"
+df111['Month'] = "21.11"
+df112['Month'] = "21.12"
+df201['Month'] = "22.01"
+df202['Month'] = "22.02"
+df203['Month'] = "22.03"
+df204['Month'] = "22.04"
+df205['Month'] = "22.05"
+df206['Month'] = "22.06"
+df207['Month'] = "22.07"
+df208['Month'] = "22.08"
 
 #데이터 프레임 연결
+df =  pd.concat([df101,df102,df103,df104,df105,df106,df107,df108,df109,df110,
+         df111,df112,df201,df202,df203,df204,df205,df206,df207,df208],ignore_index = True)
 
-#
+#(결측치)누락이 있는 행 삭제
+df.dropna()
+df.drop(['EXAMIN_PRDLST_NM','EXAMIN_SPCIES_NM'],axis=1,inplace=True)
 
-from google.colab import drive
-drive.mount('/content/drive')
+#감자 행 추출
+dfPotato = df.loc[df['STD_SPCIES_NM']=='수미']
+dfPotato
