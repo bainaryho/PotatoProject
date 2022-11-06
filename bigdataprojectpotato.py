@@ -73,5 +73,18 @@ df.dropna()
 df.drop(['EXAMIN_PRDLST_NM','EXAMIN_SPCIES_NM'],axis=1,inplace=True)
 
 #감자 행 추출
-dfPotato = df.loc[df['STD_SPCIES_NM']=='수미']
-dfPotato
+dfPotato1 = df.loc[df['STD_SPCIES_NM']=='수미'] #수미감자의
+dfPotato1 = dfPotato1.loc[dfPotato1['EXAMIN_NM']=='소비자가격'] #소비자가격 중
+dfPotato1 = dfPotato1.loc[dfPotato1['EXAMIN_UNIT_NM']=='100G'] #단위는 100G당
+dfPotato1 = dfPotato1.loc[dfPotato1['EXAMIN_GRAD_CODE']==1] # 1등급 감자만
+
+dfPotato2 = df.loc[df['STD_SPCIES_NM']=='수미'] #수미감자의
+dfPotato2 = dfPotato2.loc[dfPotato2['EXAMIN_NM']=='소비자가격'] #소비자가격 중
+dfPotato2 = dfPotato2.loc[dfPotato2['EXAMIN_UNIT_NM']=='100G'] #단위는 100G당
+dfPotato2 = dfPotato2.loc[dfPotato2['EXAMIN_GRAD_CODE']==2] # 2등급 감자만
+
+#1등급 감자와 2등급 감자의 최근 2년간 가격 추세 그래프
+import seaborn as sns
+sns.set_style('darkgrid') # option: whitegrid, white, dark
+sns.lineplot(data=dfPotato1,x='Month',y='TODAY_PRIC')
+sns.lineplot(data=dfPotato2,x='Month',y='TODAY_PRIC')
