@@ -39,30 +39,30 @@ dlist = [df101,df102,df103,df104,df105,df106,df107,df108,df109,df110,
 #불필요한 열 삭제
 for i in dlist :
   i.drop(['EXAMIN_SE_CODE','STD_PRDLST_CODE','EXAMIN_PRDLST_CODE','STD_SPCIES_CODE',
-              'EXAMIN_SPCIES_CODE','STD_UNIT_CODE','STD_UNIT_NM','BFRT_PRIC','AREA_CODE',
+              'EXAMIN_SPCIES_CODE','STD_UNIT_CODE','STD_UNIT_NM','AREA_CODE',
               'STD_MRKT_CODE','EXAMIN_MRKT_CODE','STD_MRKT_NM','EXAMIN_MRKT_NM'],axis=1,inplace=True)
 
 #년도와 월을 구분하는 Month 열 추가
-df101['Month'] = "21.01"
-df102['Month'] = "21.02"
-df103['Month'] = "21.03"
-df104['Month'] = "21.04"
-df105['Month'] = "21.05"
-df106['Month'] = "21.06"
-df107['Month'] = "21.07"
-df108['Month'] = "21.08"
-df109['Month'] = "21.09"
-df110['Month'] = "21.10"
-df111['Month'] = "21.11"
-df112['Month'] = "21.12"
-df201['Month'] = "22.01"
-df202['Month'] = "22.02"
-df203['Month'] = "22.03"
-df204['Month'] = "22.04"
-df205['Month'] = "22.05"
-df206['Month'] = "22.06"
-df207['Month'] = "22.07"
-df208['Month'] = "22.08"
+df101['Month'] = "1'1"
+df102['Month'] = "1'2"
+df103['Month'] = "1'3"
+df104['Month'] = "1'4"
+df105['Month'] = "1'5"
+df106['Month'] = "1'6"
+df107['Month'] = "1'7"
+df108['Month'] = "1'8"
+df109['Month'] = "1'9"
+df110['Month'] = "1'10"
+df111['Month'] = "1'11"
+df112['Month'] = "1'12"
+df201['Month'] = "2'1"
+df202['Month'] = "2'2"
+df203['Month'] = "2'3"
+df204['Month'] = "2'4"
+df205['Month'] = "2'5"
+df206['Month'] = "2'6"
+df207['Month'] = "2'7"
+df208['Month'] = "2'8"
 
 #데이터 프레임 연결
 df =  pd.concat([df101,df102,df103,df104,df105,df106,df107,df108,df109,df110,
@@ -72,19 +72,53 @@ df =  pd.concat([df101,df102,df103,df104,df105,df106,df107,df108,df109,df110,
 df.dropna()
 df.drop(['EXAMIN_PRDLST_NM','EXAMIN_SPCIES_NM'],axis=1,inplace=True)
 
-#감자 행 추출
-dfPotato1 = df.loc[df['STD_SPCIES_NM']=='수미'] #수미감자의
-dfPotato1 = dfPotato1.loc[dfPotato1['EXAMIN_NM']=='소비자가격'] #소비자가격 중
-dfPotato1 = dfPotato1.loc[dfPotato1['EXAMIN_UNIT_NM']=='100G'] #단위는 100G당
-dfPotato1 = dfPotato1.loc[dfPotato1['EXAMIN_GRAD_CODE']==1] # 1등급 감자만
+#소비자가격(100g) 감자 행 추출
+dfPotatoP1 = df.loc[df['STD_SPCIES_NM']=='수미'] #수미감자
+dfPotatoP1 = dfPotatoP1.loc[dfPotatoP1['EXAMIN_NM']=='소비자가격'] #소비자가격
+dfPotatoP1 = dfPotatoP1.loc[dfPotatoP1['EXAMIN_UNIT_NM']=='100G'] #100G
+dfPotatoP1 = dfPotatoP1.loc[dfPotatoP1['EXAMIN_GRAD_CODE']==1] # 1등급 감자
 
-dfPotato2 = df.loc[df['STD_SPCIES_NM']=='수미'] #수미감자의
-dfPotato2 = dfPotato2.loc[dfPotato2['EXAMIN_NM']=='소비자가격'] #소비자가격 중
-dfPotato2 = dfPotato2.loc[dfPotato2['EXAMIN_UNIT_NM']=='100G'] #단위는 100G당
-dfPotato2 = dfPotato2.loc[dfPotato2['EXAMIN_GRAD_CODE']==2] # 2등급 감자만
+dfPotatoP2 = df.loc[df['STD_SPCIES_NM']=='수미'] #수미감자
+dfPotatoP2 = dfPotatoP2.loc[dfPotatoP2['EXAMIN_NM']=='소비자가격'] #소비자가격
+dfPotatoP2 = dfPotatoP2.loc[dfPotatoP2['EXAMIN_UNIT_NM']=='100G'] #100G
+dfPotatoP2 = dfPotatoP2.loc[dfPotatoP2['EXAMIN_GRAD_CODE']==2] # 2등급 감자
 
-#1등급 감자와 2등급 감자의 최근 2년간 가격 추세 그래프
+#도매가격(20KG) 감자 행 추출
+dfPotatoD1 = df.loc[df['STD_SPCIES_NM']=='수미'] #수미감자의
+dfPotatoD1 = dfPotatoD1.loc[dfPotatoD1['EXAMIN_NM']=='도매가격'] #도매가격 중
+dfPotatoD1 = dfPotatoD1.loc[dfPotatoD1['EXAMIN_UNIT_NM']=='20KG'] #20KG
+dfPotatoD1 = dfPotatoD1.loc[dfPotatoD1['EXAMIN_GRAD_CODE']==1] # 1등급 감자만
+
+dfPotatoD2 = df.loc[df['STD_SPCIES_NM']=='수미'] #수미감자의
+dfPotatoD2 = dfPotatoD2.loc[dfPotatoD2['EXAMIN_NM']=='도매가격'] #도매가격 중
+dfPotatoD2 = dfPotatoD2.loc[dfPotatoD2['EXAMIN_UNIT_NM']=='20KG'] #20KG
+dfPotatoD2 = dfPotatoD2.loc[dfPotatoD2['EXAMIN_GRAD_CODE']==2] # 2등급 감자만
+
+#소비자 가격 1등급 감자와 2등급 감자의 최근 2년간 가격 추세 그래프
 import seaborn as sns
-sns.set_style('darkgrid') # option: whitegrid, white, dark
-sns.lineplot(data=dfPotato1,x='Month',y='TODAY_PRIC')
-sns.lineplot(data=dfPotato2,x='Month',y='TODAY_PRIC')
+sns.set_style('darkgrid')
+sns.lineplot(data=dfPotatoP1,x='Month',y='TODAY_PRIC')
+sns.lineplot(data=dfPotatoP2,x='Month',y='TODAY_PRIC')
+
+#도매 가격 1등급 감자와 2등급 감자의 최근 2년간 가격 추세 그래프
+import seaborn as sns
+sns.set_style('darkgrid') 
+sns.lineplot(data=dfPotatoD1,x='Month',y='TODAY_PRIC')
+sns.lineplot(data=dfPotatoD2,x='Month',y='TODAY_PRIC')
+
+#봄감자는 6월 상순부터 7월 상순에 집중출하가 이루어져 감자가격이 폭락하는 원인이 되고있다.
+#21년 봄감자 생산량은 379,671톤
+#22년 봄감자 생산량은 303,243톤
+#22년 봄감자는 전년에 비해 -20.1% 감소하였다. #출처 통계청 22년 봄감자 생산량 조사 결과(22.9.7)
+
+#이와 같은 생산량 저하가 22년 4~5월 간의 감자가격 폭등을 불러온 것으로 보인다.
+#21년의 감자 가격 또한 10월 이후로 가격이 오른 것이 보이는데 22년도 다르지 않을 것으로 예상 된다.
+
+#21년부터 22년 10월까지의 감자 반입량을 csv로 가공해 보았다.
+dfCarryin = pd.read_csv('/content/drive/MyDrive/Colab_Datas/농업관측센터감자반입량동향.csv')
+#이를통해 기존 그래프에서 구할 수 없던 9월과 10월의 20KG당 가격을 예측해 보인다.
+import seaborn as sns
+sns.set_style('darkgrid') 
+sns.lineplot(data=dfCarryin,x='Month',y='CARRY_IN') #감자 하루당 평균 반입량 월별 그래프 단위(톤/일)
+
+#머신러닝을 돌리기로함. 이전날의 가격, 반입량(곡선화) 사용하여 각각의 그래프를 만들고 가격예측.
