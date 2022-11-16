@@ -9,6 +9,8 @@ Original file is located at
 
 import pandas as pd
 import numpy as np
+#원천조사가격정보 csv파일 사용을 위해 20개의 csv파일을 ,로 구분되는 csv파일로 저장후
+#구글드라이브에 업데이트하여 런타임이 종료되어도 저장되는 csv파일로 저장.
 
 #공공데이터 농축산물원천조사가격정보 데이터프레임 생성
 df101 = pd.read_csv('/content/drive/MyDrive/Colab_Datas/원천조사가격정보_202101.csv')
@@ -32,6 +34,8 @@ df206 = pd.read_csv('/content/drive/MyDrive/Colab_Datas/원천조
 df207 = pd.read_csv('/content/drive/MyDrive/Colab_Datas/원천조사가격정보_202207.csv')
 df208 = pd.read_csv('/content/drive/MyDrive/Colab_Datas/원천조사가격정보_202208.csv')
 
+
+
 #데이터 프레임 리스트 생성
 dlist = [df101,df102,df103,df104,df105,df106,df107,df108,df109,df110,
          df111,df112,df201,df202,df203,df204,df205,df206,df207,df208]
@@ -43,6 +47,7 @@ for i in dlist :
               'STD_MRKT_CODE','EXAMIN_MRKT_CODE','STD_MRKT_NM','EXAMIN_MRKT_NM'],axis=1,inplace=True)
 
 #년도와 월을 구분하는 Month 열 추가
+# 년'월 형식
 df101['Month'] = "1'1"
 df102['Month'] = "1'2"
 df103['Month'] = "1'3"
@@ -73,6 +78,7 @@ df.dropna()
 df.drop(['EXAMIN_PRDLST_NM','EXAMIN_SPCIES_NM'],axis=1,inplace=True)
 
 #소비자가격(100g) 감자 행 추출
+#P1소비자1등급 P2소비자2등급
 dfPotatoP1 = df.loc[df['STD_SPCIES_NM']=='수미'] #수미감자
 dfPotatoP1 = dfPotatoP1.loc[dfPotatoP1['EXAMIN_NM']=='소비자가격'] #소비자가격
 dfPotatoP1 = dfPotatoP1.loc[dfPotatoP1['EXAMIN_UNIT_NM']=='100G'] #100G
@@ -84,6 +90,7 @@ dfPotatoP2 = dfPotatoP2.loc[dfPotatoP2['EXAMIN_UNIT_NM']=='100G'] #100G
 dfPotatoP2 = dfPotatoP2.loc[dfPotatoP2['EXAMIN_GRAD_CODE']==2] # 2등급 감자
 
 #도매가격(20KG) 감자 행 추출
+#D1도매1등급 D2도매2등급
 dfPotatoD1 = df.loc[df['STD_SPCIES_NM']=='수미'] #수미감자의
 dfPotatoD1 = dfPotatoD1.loc[dfPotatoD1['EXAMIN_NM']=='도매가격'] #도매가격 중
 dfPotatoD1 = dfPotatoD1.loc[dfPotatoD1['EXAMIN_UNIT_NM']=='20KG'] #20KG
@@ -115,10 +122,54 @@ sns.lineplot(data=dfPotatoD2,x='Month',y='TODAY_PRIC')
 #21년의 감자 가격 또한 10월 이후로 가격이 오른 것이 보이는데 22년도 다르지 않을 것으로 예상 된다.
 
 #21년부터 22년 10월까지의 감자 반입량을 csv로 가공해 보았다.
+import pandas as pd
 dfCarryin = pd.read_csv('/content/drive/MyDrive/Colab_Datas/농업관측센터감자반입량동향.csv')
 #이를통해 기존 그래프에서 구할 수 없던 9월과 10월의 20KG당 가격을 예측해 보인다.
 import seaborn as sns
 sns.set_style('darkgrid') 
 sns.lineplot(data=dfCarryin,x='Month',y='CARRY_IN') #감자 하루당 평균 반입량 월별 그래프 단위(톤/일)
 
+# Commented out IPython magic to ensure Python compatibility.
 #머신러닝을 돌리기로함. 이전날의 가격, 반입량(곡선화) 사용하여 각각의 그래프를 만들고 가격예측.
+
+#반입량 곡선화 과정
+import matplotlib.pyplot as plt
+# %matplotlib inline
+
+#Month의 값을 머신러닝 가능하도록 정수형태로 인덱스열을 추가
+dfCarryin.index();
+
+dfCarryin.columns = ['Month', 'Price_20kg','Carry_in']
+
+
+#Data를 2차원배열로 나타내줌
+Data = dfCarryin[['Index','CARRY_IN']]
+Data = Data.to_numpy()
+
+# x와 y에 각각 2차원 배열의 행과 열을 넣어줌
+x = [Data[k][0] for k in range(len(Data))] 
+y = [Data[k][1] for k in range(len(Data))]
+
+import matplotlib.pyplot as plt
+# %matplotlib inline
+plt.rcParams['figure.dpi'] = 150
+plt.xlim(0,21)
+plt.ylim(0,450)
+plt.plot(x, y, "x")
+
+X = [[x[m]] for m in range(len(Data))]
+
+from sklearn import linear_model
+reg = linear_model.LinearRegression()
+reg.fit(X,y)
+print(reg.intercept_)
+print(reg.coef_)
+
+xp = [0.1*k for k in range(101)]
+Xp = [[xp[m]] for m in range(101)]
+yp = reg.predict(Xp)
+
+plt.xlim(0,21)
+plt.ylim(0,450)
+plt.plot(x, y, "x")
+plt.plot(xp, yp)
