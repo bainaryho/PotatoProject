@@ -8,7 +8,7 @@ Python, numpy, pandas, ARIMA(머신러닝) 라이브러리를 이용한 선형�
 
 
 ## 결과: 
-<img src="https://github.com/bainaryho/DjangoSNS/assets/90160898/4e9716e6-5b69-493d-a462-81dc81e19c25" width="130" height="130"> <img src="https://github.com/bainaryho/DjangoSNS/assets/90160898/53d149e8-6bfe-4d75-96cd-007f99534056" width="130" height="130">
+<img src="https://github.com/bainaryho/DjangoSNS/assets/90160898/4e9716e6-5b69-493d-a462-81dc81e19c25" width="150" height="130"> <img src="https://github.com/bainaryho/DjangoSNS/assets/90160898/53d149e8-6bfe-4d75-96cd-007f99534056" width="150" height="130">
 <br>22년 10월까지(당시 38,659원)정보로 예측한 11월의 감자의 가격은 40021원, 실제 가격은 41,469원으로 감자가격 상승 예측 성공
 
 ## 활용 방안:
